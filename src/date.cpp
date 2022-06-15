@@ -37,6 +37,27 @@ project::Date::Date(std::time_t timer) {
     this->myear = calendar_timer->tm_year + 1900;
 }
 
+int project::Date::get_month_day() const {
+    return this->mday;
+}
+
+int project::Date::get_month() const {
+    return this->mmonth;
+}
+
+int project::Date::get_year() const {
+    return this->myear;
+}
+
+int project::Date::get_year_day() const {
+    return (OveralDayCount[this->get_month()-1] + project::Date::isleap(this->get_year()) + this->get_month_day());
+}
+
+constexpr bool project::Date::isleap(int y) {
+    if(y%4==0) return true;
+    return false;
+}
+
 namespace project {
     std::ostream &operator<<(std::ostream &os, const project::Date &date) {
         std::cout << date.mday << "-" << date.mmonth << "-" << date.myear; 

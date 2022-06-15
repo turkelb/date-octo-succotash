@@ -18,4 +18,12 @@ int main() {
     std::cout << mydate4 << std::endl;
 
 
+    project::Date mydate5(1, 1, 1990);
+    std::cout << mydate5.get_year_day() << std::endl;
+    project::Date mydate6(1, 2, 1990);
+    std::cout << mydate6.get_year_day() << std::endl;
+    project::Date mydate7(3, 3, 1990);
+    std::cout << mydate7.get_year_day() << std::endl;
+
+
 }
