@@ -14,7 +14,8 @@ public:
 	static constexpr int random_min_year = 1940;  //2
 	static constexpr int random_max_year = 2020;  //3
 	enum class Weekday {Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday}; //4
-	int OveralDayCount[12] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334}; 
+	int OveralDayCount[12] = { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 }; 
+	int DaysInMonths[13] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 	//Date(); //5 // bturkel: buna neden ihtiyac olmadigini not et.
 	Date(int d = 1, int m = 1, int y = 1990);  //6
 	Date(const char *p);  //7

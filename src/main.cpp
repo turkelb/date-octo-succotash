@@ -24,6 +24,54 @@ int main() {
     std::cout << mydate6.get_year_day() << std::endl;
     project::Date mydate7(3, 3, 1990);
     std::cout << mydate7.get_year_day() << std::endl;
+    project::Date::Weekday weekday = mydate7.get_week_day();
+    std::cout << static_cast<int>(weekday) << std::endl;
+
+    mydate7.set_month_day(30);
+    std::cout << mydate7 << std::endl;
+    mydate7.set_month(7);
+    std::cout << mydate7 << std::endl;
+    mydate7.set_year(2000);
+    std::cout << mydate7 << std::endl;
+    mydate7.set(26,12,1986);
+    std::cout << mydate7 << std::endl;
+
+    project::Date mydate8 = mydate7 - 1;
+    std::cout << mydate8 << std::endl;
+
+    project::Date mydate9 = mydate7 - 26;
+    std::cout << mydate9 << std::endl;
+
+    project::Date mydate10 = mydate7 - 365;
+    std::cout << mydate10 << std::endl;
+
+    mydate7.set(1,3,1988);
+    project::Date mydate11 = mydate7 - 1;
+    std::cout << mydate11 << std::endl;
+
+    std::cout << "Test for operator+= & operator-=" << std::endl;
+    mydate10 += 365;
+    std::cout << mydate10 << std::endl;
+    mydate10 -= 365;
+    std::cout << mydate10 << std::endl;
+
+    mydate9 += 26;
+    std::cout << mydate9 << std::endl;
+    mydate9 -= 26;
+    std::cout << mydate9 << std::endl;
+
+    mydate8 += 1;
+    std::cout << mydate8 << std::endl;
+    mydate8 -= 1;
+    std::cout << mydate8 << std::endl;
+
+    mydate11.set(1,2,1988);
+    mydate11 += 30;
+    std::cout << mydate11 << std::endl;
+
+    mydate11.set(1,2,1989);
+    mydate11 += 30;
+    std::cout << mydate11 << std::endl;
 
 
 }
