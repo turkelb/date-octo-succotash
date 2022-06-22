@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <random>
 #include "date.hpp"
 
 /*
@@ -54,7 +55,10 @@ int project::Date::get_year_day() const {
 }
 
 project::Date::Weekday project::Date::get_week_day()const {
-    return Weekday::Saturday;
+    int diff = *this - Date(7,1,1900);
+    std::cout << "diff=" << diff << std::endl; 
+    int weekday = diff % 7;
+    return static_cast<Weekday>(weekday);
     // todo: implement
     // set a reference point and check diff between two dates 
 }
@@ -152,7 +156,6 @@ project::Date& project::Date::operator+=(int day) {
 }
 
 // 20
-
 project::Date& project::Date::operator-=(int day) {
     bool isLeapYear = project::Date::isleap(myear);
 
@@ -181,6 +184,52 @@ project::Date& project::Date::operator-=(int day) {
     return *this;
 }
 
+
+// 21
+project::Date& project::Date::operator++() {
+    *this += 1;
+    return *this;
+}
+
+// 22
+project::Date project::Date::operator++(int) {
+    project::Date temp = *this;
+    ++*this;
+    return temp;
+}
+
+// 23
+project::Date& project::Date::operator--() {
+    *this -= 1;
+    return *this;
+}
+
+// 24
+project::Date project::Date::operator--(int) {
+    project::Date temp = *this;
+    --*this;
+    return temp;
+}
+
+// 25
+project::Date project::Date::random_date() {
+    std::random_device rand_dev;
+    std::mt19937 generator(rand_dev());
+    std::uniform_int_distribution<int> distr_year(project::Date::random_min_year, project::Date::random_max_year);
+    int year = distr_year(generator);
+
+    std::uniform_int_distribution<int> distr_mon(1, 12);
+    int month = distr_mon(generator);
+
+    int dayMax = (month==2 && project::Date::isleap(year)) ? (project::Date::DaysInMonths[month]+1) : project::Date::DaysInMonths[month];
+    std::uniform_int_distribution<int> distr_day(1, dayMax);
+    int day = distr_day(generator);
+
+
+    return project::Date(day, month, year);
+}
+
+// 26
 constexpr bool project::Date::isleap(int y) {
     // there are more criterias to check if a year is a leap year but we dont need to take into acount since our min year is 1900!!
     if(y%4==0) return true;
@@ -188,8 +237,139 @@ constexpr bool project::Date::isleap(int y) {
 }
 
 namespace project {
+    // 27 neden bu ikisi friend olsun ki? 
+    bool operator<(const Date& leftDate, const Date& rightDate) {
+        if(leftDate.get_year()<rightDate.get_year()) {
+            return true;
+        }
+        else if(leftDate.get_year()>rightDate.get_year()) {
+            return false;
+        }
+        else {
+            if(leftDate.get_month()<rightDate.get_month()) {
+                return true;
+            } 
+            else if(leftDate.get_month()>rightDate.get_month()) {
+                return false;
+            }
+            else {
+                if(leftDate.get_month_day()<rightDate.get_month_day())  {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+    }
+
+    bool operator==(const Date& leftDate, const Date& rightDate) {
+        if(leftDate.get_year()!=rightDate.get_year()) {
+            return false;
+        }
+        else {
+            if(leftDate.get_month()!=rightDate.get_month()) {
+                return false;
+            }
+            else {
+                if(leftDate.get_month_day()!=rightDate.get_month_day()) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+        }
+    }
+	
+    bool operator<=(const Date& leftDate, const Date& rightDate) {
+        if(leftDate<rightDate || leftDate==rightDate) {
+            return true;
+        }
+        return false;
+    }
+
+    bool operator>(const Date& leftDate, const Date& rightDate) {
+        if(!(leftDate<=rightDate)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    bool operator>=(const Date& leftDate, const Date& rightDate) { 
+        if(leftDate>rightDate || leftDate==rightDate) {
+            return true;
+        }
+        return false;
+    }
+
+    bool operator!=(const Date& leftDate, const Date& rightDate) { 
+        if(!(leftDate==rightDate)) {
+            return true;
+        }
+        return false;
+    }
+
+    // 28
+    int operator-(const Date &d1, const Date &d2) {
+        if(d1==d2) return 0;
+        
+        std::cout << "Operator-" << std::endl;
+
+        Date newerDate;
+        Date olderDate;
+        if(d1>d2) {
+            newerDate = d1;
+            olderDate = d2;
+        } 
+        else {
+            newerDate = d2;
+            olderDate = d1;       
+        }
+
+        int dayToAdd = 0;
+        dayToAdd = newerDate.get_year_day();
+        newerDate -= dayToAdd;
+
+        int dayToRemove = olderDate.get_year_day();
+        olderDate -= dayToRemove;
+
+        int day;
+        day = dayToAdd - dayToRemove;
+
+       /*
+       while(newerDate.get_month_day()!=olderDate.get_month_day()) {
+            int temp = 1;
+            day += temp;
+            olderDate += temp;
+       }
+
+        std::cout << "(" << olderDate << ")" << std::endl;
+
+        while(newerDate.get_month()!=olderDate.get_month()) {
+            int temp = (olderDate.get_month()==2 && project::Date::isleap(olderDate.get_year())) ? (project::Date::DaysInMonths[olderDate.get_month()]+1) : project::Date::DaysInMonths[olderDate.get_month()];
+            std::cout << "  month " << temp << "(" << olderDate << ")" << std::endl;
+
+            day += temp;
+            olderDate += temp;
+        }
+
+        std::cout << "(" << olderDate << ")" << std::endl;
+        */
+        while(newerDate.get_year()!=olderDate.get_year()) {
+            int temp = project::Date::isleap(olderDate.get_year()) ? (366) : (365);
+            day += temp;
+            olderDate += temp;
+        }
+
+        return day;
+    }
+
+
     std::ostream &operator<<(std::ostream &os, const project::Date &date) {
         std::cout << date.mday << "-" << date.mmonth << "-" << date.myear; 
         return os;
     }
+
 }
