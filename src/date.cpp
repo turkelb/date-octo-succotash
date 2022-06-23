@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include <random>
+#include <string>
 #include "date.hpp"
 
 /*
@@ -55,12 +56,9 @@ int project::Date::get_year_day() const {
 }
 
 project::Date::Weekday project::Date::get_week_day()const {
-    int diff = *this - Date(7,1,1900);
-    std::cout << "diff=" << diff << std::endl; 
-    int weekday = diff % 7;
-    return static_cast<Weekday>(weekday);
-    // todo: implement
     // set a reference point and check diff between two dates 
+    int diff = *this - Date(7,1,1900);
+    return static_cast<Weekday>(diff % 7);
 }
 
 // 14
@@ -338,25 +336,6 @@ namespace project {
         int day;
         day = dayToAdd - dayToRemove;
 
-       /*
-       while(newerDate.get_month_day()!=olderDate.get_month_day()) {
-            int temp = 1;
-            day += temp;
-            olderDate += temp;
-       }
-
-        std::cout << "(" << olderDate << ")" << std::endl;
-
-        while(newerDate.get_month()!=olderDate.get_month()) {
-            int temp = (olderDate.get_month()==2 && project::Date::isleap(olderDate.get_year())) ? (project::Date::DaysInMonths[olderDate.get_month()]+1) : project::Date::DaysInMonths[olderDate.get_month()];
-            std::cout << "  month " << temp << "(" << olderDate << ")" << std::endl;
-
-            day += temp;
-            olderDate += temp;
-        }
-
-        std::cout << "(" << olderDate << ")" << std::endl;
-        */
         while(newerDate.get_year()!=olderDate.get_year()) {
             int temp = project::Date::isleap(olderDate.get_year()) ? (366) : (365);
             day += temp;
@@ -366,10 +345,68 @@ namespace project {
         return day;
     }
 
+    // 29
+    project::Date operator+(const project::Date &date, int n) {
+        project::Date temp = date;  
+        temp += n;
+        return temp;
+    }
+
+    project::Date operator+(int n, const Date &date) {
+        project::Date temp = date;  
+        temp += n;
+        return temp;
+    }
+
+    // 30
+    project::Date::Weekday& operator++(project::Date::Weekday &r) {
+        r = static_cast<project::Date::Weekday>((static_cast<int>(r)+1) % 7);
+        return r;
+    }
+
+    project::Date::Weekday operator++(project::Date::Weekday &r, int) {
+        project::Date::Weekday temp = r;
+        r = static_cast<project::Date::Weekday>((static_cast<int>(r)+1) % 7);
+        return temp;
+    }
+
+    project::Date::Weekday& operator--(project::Date::Weekday &r) {
+        int tempInt = static_cast<int>(r);
+        if(tempInt==0) {
+            tempInt = 7;
+        }
+
+        r = static_cast<project::Date::Weekday>((tempInt-1) % 7);
+        return r;
+    }
+
+    project::Date::Weekday operator--(project::Date::Weekday &r, int) {
+        project::Date::Weekday temp = r;
+        int tempInt = static_cast<int>(r);
+        if(tempInt==0) {
+            tempInt = 7;
+        }
+        r = static_cast<project::Date::Weekday>((tempInt-1) % 7);
+        return temp;
+    }
 
     std::ostream &operator<<(std::ostream &os, const project::Date &date) {
         std::cout << date.mday << "-" << date.mmonth << "-" << date.myear; 
         return os;
     }
+
+    std::istream &operator>>(std::istream &is, Date &date) {
+        std::string input;
+        std::getline(std::cin, input);
+        std::istringstream line(input);
+        std::getline(line, input, '/');
+        date.mday = stoi(input);
+        std::getline(line, input, '/');
+        date.mmonth = stoi(input);
+        std::getline(line, input, '/');
+        date.myear = stoi(input);
+        return is;
+    }
+
 
 }

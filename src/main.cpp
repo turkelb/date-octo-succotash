@@ -148,5 +148,28 @@ int main() {
     diff = mydate10 - mydate11;
     std::cout << "(" << mydate10 << ")-(" << mydate11 << ")=" << diff << std::endl;
 
+    std::cout << "operator+" << std::endl;
+    project::Date mydate15 = mydate10 + 1;
+    project::Date mydate16 = 1 + mydate10;
+    std::cout << mydate10 << std::endl;
+    std::cout << mydate15 << std::endl;
+    std::cout << mydate16 << std::endl;
+
+    std::cout << "operators for Weekday enum" << std::endl;
+    project::Date::Weekday sunday = static_cast<project::Date::Weekday>(0);
+    sunday++;
+    std::cout << static_cast<int>(sunday) << std::endl;
+    sunday--;
+    std::cout << static_cast<int>(sunday) << std::endl;
+    sunday--;
+    std::cout << static_cast<int>(sunday) << std::endl;
+    std::cout << static_cast<int>(sunday++) << std::endl;
+    std::cout << static_cast<int>(++sunday) << std::endl;
+
+
+    std::cout << "input stream to date object" << std::endl;
+    std::cin >> mydate16;
+    std::cout << mydate16 << std::endl;
+
 
 }
