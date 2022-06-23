@@ -4,14 +4,6 @@
 #include <string>
 #include "date.hpp"
 
-/*
-project::Date::Date() {
-    this->mday = 01;
-    this->mmonth = 01;
-    this->myear = 1900;
-}
-*/
-
 project::Date::Date(int d, int m, int y) {
     this->mday = d;
     this->mmonth = m;
@@ -57,29 +49,26 @@ int project::Date::get_year_day() const {
 
 project::Date::Weekday project::Date::get_week_day()const {
     // set a reference point and check diff between two dates 
+    // 7/1/1900 is our reference date..
     int diff = *this - Date(7,1,1900);
     return static_cast<Weekday>(diff % 7);
 }
 
-// 14
 project::Date& project::Date::set_month_day(int day) {
     this->mday = day;
     return *this;
 }
 
-// 15
 project::Date& project::Date::set_month(int month) {
     this->mmonth = month;
     return *this;
 }
 
-// 16
 project::Date& project::Date::set_year(int year) {
     this->myear = year;
     return *this;
 }
 
-// 17
 project::Date& project::Date::set(int day, int mon, int year) {
     this->mday = day;
     this->mmonth = mon;
@@ -87,7 +76,6 @@ project::Date& project::Date::set(int day, int mon, int year) {
     return *this;
 }   
 
-// 18
 project::Date project::Date::operator-(int day) const {
     int tday, tmon, tyear;
     bool isLeapYear = project::Date::isleap(myear);
@@ -120,7 +108,6 @@ project::Date project::Date::operator-(int day) const {
     return Date(tday, tmon, tyear);
 }
 
-// 19
 project::Date& project::Date::operator+=(int day) {
     int remainingDaysInCurrMon = DaysInMonths[mmonth] - mday;
     bool isLeapYear = project::Date::isleap(myear);
@@ -153,7 +140,6 @@ project::Date& project::Date::operator+=(int day) {
     return *this;
 }
 
-// 20
 project::Date& project::Date::operator-=(int day) {
     bool isLeapYear = project::Date::isleap(myear);
 
@@ -182,34 +168,28 @@ project::Date& project::Date::operator-=(int day) {
     return *this;
 }
 
-
-// 21
 project::Date& project::Date::operator++() {
     *this += 1;
     return *this;
 }
 
-// 22
 project::Date project::Date::operator++(int) {
     project::Date temp = *this;
     ++*this;
     return temp;
 }
 
-// 23
 project::Date& project::Date::operator--() {
     *this -= 1;
     return *this;
 }
 
-// 24
 project::Date project::Date::operator--(int) {
     project::Date temp = *this;
     --*this;
     return temp;
 }
 
-// 25
 project::Date project::Date::random_date() {
     std::random_device rand_dev;
     std::mt19937 generator(rand_dev());
@@ -227,7 +207,6 @@ project::Date project::Date::random_date() {
     return project::Date(day, month, year);
 }
 
-// 26
 constexpr bool project::Date::isleap(int y) {
     // there are more criterias to check if a year is a leap year but we dont need to take into acount since our min year is 1900!!
     if(y%4==0) return true;
@@ -235,7 +214,6 @@ constexpr bool project::Date::isleap(int y) {
 }
 
 namespace project {
-    // 27 neden bu ikisi friend olsun ki? 
     bool operator<(const Date& leftDate, const Date& rightDate) {
         if(leftDate.get_year()<rightDate.get_year()) {
             return true;
@@ -309,7 +287,6 @@ namespace project {
         return false;
     }
 
-    // 28
     int operator-(const Date &d1, const Date &d2) {
         if(d1==d2) return 0;
         
@@ -345,7 +322,6 @@ namespace project {
         return day;
     }
 
-    // 29
     project::Date operator+(const project::Date &date, int n) {
         project::Date temp = date;  
         temp += n;
@@ -358,7 +334,6 @@ namespace project {
         return temp;
     }
 
-    // 30
     project::Date::Weekday& operator++(project::Date::Weekday &r) {
         r = static_cast<project::Date::Weekday>((static_cast<int>(r)+1) % 7);
         return r;
@@ -407,6 +382,4 @@ namespace project {
         date.myear = stoi(input);
         return is;
     }
-
-
 }

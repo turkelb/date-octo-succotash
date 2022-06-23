@@ -168,8 +168,13 @@ int main() {
 
 
     std::cout << "input stream to date object" << std::endl;
-    std::cin >> mydate16;
+    //std::cin >> mydate16;
     std::cout << mydate16 << std::endl;
+
+    std::cout << "varsayılan kurucu işlev" << std::endl;
+    project::Date mydate20;
+    std::cout << mydate20 << std::endl;
+
 
 
 }
